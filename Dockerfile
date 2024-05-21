@@ -1,15 +1,18 @@
-FROM golang:1.16 as builder
-RUN go get github.com/codegangsta/negroni
-RUN go get github.com/gorilla/mux github.com/xyproto/simpleredis
-COPY main.go .
-RUN go build main.go
+# Use an official Node.js runtime as a parent image
+FROM node:14
 
-FROM ubuntu:20.04
-COPY --from=builder /go/main /app/guestbook
-ADD public/index.html /app/public/index.html
-ADD public/script.js /app/public/script.js
-ADD public/style.css /app/public/style.css
-ADD public/jquery.min.js /app/public/jquery.min.js
+# Set the working directory in the container
 WORKDIR /app
-CMD ["./guestbook"]
+
+# Copy the application files to the working directory
+COPY main.js .
+COPY public/index.html public/index.html
+COPY public/script.js public/script.js
+COPY public/style.css public/style.css
+COPY public/jquery.min.js public/jquery.min.js
+
+# Make port 3000 available to the world outside this container
 EXPOSE 3000
+
+# Run the application when the container launches
+CMD ["node", "main.js"]
