@@ -1,12 +1,27 @@
 const http = require('http');
+const fs = require('fs');
+const path = require('path');
 
 const hostname = '0.0.0.0'; // Bind to all network interfaces
 const port = 3000;
+const indexPath = path.join(__dirname, 'public', 'index.html');
 
 const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello from MyApp. Your app is up!\n');
+  // Read the contents of index.html
+  fs.readFile(indexPath, (err, data) => {
+    if (err) {
+      // If an error occurs while reading the file, respond with an error status code
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'text/plain');
+      res.end('Internal Server Error');
+      console.error('Error reading index.html:', err);
+    } else {
+      // If the file is read successfully, respond with its contents
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'text/html');
+      res.end(data);
+    }
+  });
 });
 
 server.listen(port, hostname, () => {
