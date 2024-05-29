@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: myapp-container
-        image: us.icr.io/<sn-labs-username>/myapp:v1
+        image: us.icr.io/sn-labs-nikeshkr/myapp:v1
         ports:
         - containerPort: 3000
           name: http
